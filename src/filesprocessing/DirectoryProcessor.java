@@ -1,10 +1,5 @@
 package filesprocessing;
 
-import filesprocessing.Parser;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.*;
-
 /**
  * process the sourceDir and commandFile. responsible to execute the program.
  */
