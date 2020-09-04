@@ -1,5 +1,6 @@
 package filesprocessing;
 
+import javax.imageio.IIOException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,29 +15,47 @@ public class Parser {
      * @param fileName
      * @return
      */
-    public static void parseCommandFile(String fileName){
-        BufferedReader reader = null;
-        try{
-            reader = new BufferedReader(new FileReader(fileName));
-            String line = reader.readLine();
-            while (line != null){
+    public static Section[] parseCommandFile(String fileName) throws IOException{
 
-                line = reader.readLine();
+        List<Section> sectionList = new ArrayList<Section>();
+        int lineIndex = 0;
+        int filterLine;
+        int orderLine;
+        String filter;
+        String order;
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String line = reader.readLine();
+        lineIndex++;
+        while (line != null){
+            if (!line.equals("FILTER")){
+                throw new IIOException("");
+            }
+            line = reader.readLine();
+            filter = line;
+            lineIndex++;
+            filterLine = lineIndex;
+            line = reader.readLine();
+            if (!line.equals("ORDER")){
+                throw new IIOException("");
+            }
+            line = reader.readLine();
+            lineIndex += 2;
+            orderLine = lineIndex;
+            if (line != null && !line.equals("FILTER")){
+                order = line;
+                sectionList.add(new Section(filter, order, filterLine, orderLine));
+
+            }
+            else{
+                sectionList.add(new Section(filter, "", filterLine, orderLine));
             }
 
-        } catch (FileNotFoundException e) {
-            System.err.println("ERROR: The file " + fileName + "is not found. ");
-        } catch (IOException e){
-            System.err.println("ERROR: An IO error occurred.");
-        } finally {
-            try{  //closing file
-                if (reader != null)
-                    reader.close();
-            } catch (IOException e) {
-                System.err.println("ERROR: Could not close the file " + fileName + ".");
-            }
         }
+        reader.close();
+        Section[] sectionArray = new Section[sectionList.size()];
+        return sectionList.toArray(sectionArray);
     }
+
 
     /**
      *
