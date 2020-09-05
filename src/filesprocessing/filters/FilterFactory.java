@@ -240,7 +240,7 @@ public class FilterFactory {
     }
 
     private static Filter getBetween(double lower, double upper) {
-        return x -> lower * K_BYTES <= x.getTotalSpace() && x.getTotalSpace() <= upper * K_BYTES;
+        return x -> lower * K_BYTES <= x.length() && x.length() <= upper * K_BYTES;
     }
 
     private static boolean isLegalRange(String[] filterComponents) {
@@ -259,11 +259,11 @@ public class FilterFactory {
     }
 
     private static Filter getSmallerThan(double upper) {
-        return x -> x.getTotalSpace() < upper * K_BYTES;
+        return x -> x.length() < upper * K_BYTES;
     }
 
     private static Filter getGreaterThan(double lower) {
-        return x -> x.getTotalSpace() > lower * K_BYTES;
+        return x -> x.length() > lower * K_BYTES;
     }
 
 
