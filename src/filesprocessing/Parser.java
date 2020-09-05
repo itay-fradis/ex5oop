@@ -27,7 +27,7 @@ public class Parser {
      */
     public static Section[] parseCommandFile(String fileName) throws IOException, BadFormatCommandFile {
 
-        List<Section> sectionList = new ArrayList<Section>();
+        List<Section> sectionList = new ArrayList<>();
         int lineIndex = 0;
         int filterLine;
         int orderLine;
@@ -69,9 +69,9 @@ public class Parser {
 
 
     /**
-     *
-     * @param fileName
-     * @return
+     * parse and return files from sourceDir.
+     * @param fileName sourceDir directory.
+     * @return array of file objects of the sourceDir directory.
      */
     public static File[] sourceDir2files(String fileName){
         File sourceDir = new File(fileName);
