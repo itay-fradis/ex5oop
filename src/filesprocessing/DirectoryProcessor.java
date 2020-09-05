@@ -1,7 +1,6 @@
 package filesprocessing;
 
 
-import com.sun.tools.javac.code.Scope;
 
 import java.io.*;
 
@@ -10,22 +9,30 @@ import java.io.*;
  */
 public class DirectoryProcessor {
 
+    /** error message - wrong num of args */
+    private static final String WRONG_NUM_OF_ARGS = "ERROR: Wrong usage. Should receive 2 arguments ";
+
+    /** error message - IO error */
+    private static final String IO_ERROR_MSG = "ERROR: An IO error occurred.";
+
     /**
-     *
-     * @param args
+     * responsible for the main flow of the program.
+     * @param args given arguments - sourceDir and Command file directories.
      */
     public static void main(String[] args){
 
         if (args.length != 2) {
-            System.err.println("Error: Wrong usage. Should receive 2 arguments");
+            System.err.println(WRONG_NUM_OF_ARGS);
             return;
         }
         try{
             Section[] sectionArray = Parser.parseCommandFile(args[1]);
         }
-        catch (IOException e){
-            System.err.println("ERROR: An IO error occured.");
-            return;
+        catch (IOException error){
+            System.err.println(IO_ERROR_MSG);
+        }
+        catch (BadFormatCommandFile error){
+            System.err.println(error.getMessage());
         }
 
 
