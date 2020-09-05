@@ -1,6 +1,8 @@
 package filesprocessing;
 
 
+import com.sun.tools.javac.code.Scope;
+
 import java.io.*;
 
 /**
@@ -18,6 +20,14 @@ public class DirectoryProcessor {
             System.err.println("Error: Wrong usage. Should receive 2 arguments");
             return;
         }
+        try{
+            Section[] sectionArray = Parser.parseCommandFile(args[1]);
+        }
+        catch (IOException e){
+            System.err.println("ERROR: An IO error occured.");
+            return;
+        }
+
 
 
 

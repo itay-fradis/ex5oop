@@ -2,8 +2,7 @@ package filesprocessing;
 
 import javax.imageio.IIOException;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -44,7 +43,8 @@ public class Parser {
             if (line != null && !line.equals("FILTER")){
                 order = line;
                 sectionList.add(new Section(filter, order, filterLine, orderLine));
-
+                line = reader.readLine();
+                lineIndex++;
             }
             else{
                 sectionList.add(new Section(filter, "", filterLine, orderLine));
