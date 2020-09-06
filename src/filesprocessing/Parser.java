@@ -28,7 +28,8 @@ public class Parser {
      * @param fileName of the command file.
      * @return array of sections.
      */
-    public static Section[] parseCommandFile(String fileName) throws IOException, BadFormatCommandFileException {
+    public static Section[] parseCommandFile(String fileName) throws IOException, BadFormatCommandFileException,
+                                                                    NullPointerException {
 
         List<Section> sectionList = new ArrayList<>();
         int lineIndex = 0;
@@ -48,7 +49,7 @@ public class Parser {
             lineIndex++;
             filterLine = lineIndex;
             line = reader.readLine();
-            if (!line.equals(ORDER_NAME)){
+            if (line == null || !line.equals(ORDER_NAME)){
                 throw new BadFormatCommandFileException(BAD_FORMAT_ERROR_ORDER);
             }
             line = reader.readLine();

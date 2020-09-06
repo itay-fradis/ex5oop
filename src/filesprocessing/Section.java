@@ -10,7 +10,8 @@ import java.util.function.Predicate;
 
 
 /**
- *
+ * this class is a unit of instructions how to filter and order the files.
+ * composed of filter and order objects.
  */
 public class Section {
 
@@ -31,11 +32,11 @@ public class Section {
 
 
     /**
-     *
-     * @param filter
-     * @param order
-     * @param filterLine
-     * @param orderLine
+     * constructor
+     * @param filter filter name
+     * @param order order name
+     * @param filterLine number of line the filter was shown in file.
+     * @param orderLine number of line the order was shown in file.
      */
     public Section(String filter, String order, int filterLine, int orderLine){
         this.filterName = filter;
@@ -58,6 +59,9 @@ public class Section {
         return filter;
     }
 
+    /**
+     * @return new order object (comparator)
+     */
     public Comparator<File> createOrder() {
         Comparator<File> order = OrderFactory.getDefaultOrder();
         try{
