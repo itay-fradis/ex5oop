@@ -21,6 +21,9 @@ public class OrderFactory {
     /** sort files by their type - symbol */
     private static final String TYPE_ORDER = "type";
 
+    /** sort files by their absolute name if empty string */
+    private static final String EMPTY_STRING = "";
+
     /** sort files by their size - symbol */
     private static final String SIZE_ORDER = "size";
 
@@ -53,6 +56,7 @@ public class OrderFactory {
         String[] orderComponents = orderName.split(DELIMITER);
         switch (orderComponents[0]){
             case ABS_ORDER:
+            case EMPTY_STRING:
                 if (isLegalNameOrder(orderComponents)){
                     order = getAbsOrder();
                     break;
@@ -107,7 +111,7 @@ public class OrderFactory {
      * @return comparator of alphabetic order.
      */
     private static Comparator<File> getAbsOrder() {
-        return (x, y) -> x.getAbsolutePath().compareTo(y.getAbsolutePath());
+        return Comparator.comparing(File::getAbsolutePath);
     }
 
     /**

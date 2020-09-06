@@ -82,7 +82,7 @@ public class FilterFactory {
      */
     public static Predicate<File> createFilter(String filterName) throws BadFilterException{
         Predicate<File> filter;
-        String[] filterComponents = filterName.split(DELIMITER);
+        String[] filterComponents = filterName.split(DELIMITER, -1);
         switch (filterComponents[0]){
             case GREATER:
                 if (isNonNegativeNumber(filterComponents)){
@@ -172,7 +172,7 @@ public class FilterFactory {
     /**
      * @return filter always true.
      */
-    private static Filter getAll() {
+    private static Predicate<File> getAll() {
         return x -> true;
     }
 
@@ -181,7 +181,13 @@ public class FilterFactory {
      * @return whether the format is legal or not.
      */
     private static boolean isLegalAllFilter(String[] filterComponents) {
-        return filterComponents.length == 1;
+        if (filterComponents.length == 1){
+            return true;
+        }
+        if (filterComponents.length == 2){
+            return filterComponents[1].equals(NOT_SUFFIX);
+        }
+        return false;
     }
 
     /**
@@ -216,7 +222,7 @@ public class FilterFactory {
     /**
      * @return filter that checks if can write to the file.
      */
-    private static Filter getWritable() {
+    private static Predicate<File> getWritable() {
         return File::canWrite;
     }
 
@@ -224,7 +230,7 @@ public class FilterFactory {
      * @param filterComponent given suffix to check
      * @return filter that checks if includes that suffix.
      */
-    private static Filter getSuffix(String filterComponent) {
+    private static Predicate<File> getSuffix(String filterComponent) {
         return x -> x.getName().endsWith(filterComponent);
     }
 
@@ -232,7 +238,7 @@ public class FilterFactory {
      * @param filterComponent given prefix to check
      * @return filter that checks if includes that prefix.
      */
-    private static Filter getPrefix(String filterComponent) {
+    private static Predicate<File> getPrefix(String filterComponent) {
         return x -> x.getName().startsWith(filterComponent);
     }
 
@@ -240,7 +246,7 @@ public class FilterFactory {
      * @param filterComponent given string to check
      * @return filter that checks if includes that string.
      */
-    private static Filter getContains(String filterComponent) {
+    private static Predicate<File> getContains(String filterComponent) {
         return x -> x.getName().contains(filterComponent);
     }
 
@@ -248,7 +254,7 @@ public class FilterFactory {
      * @param filterComponent given file name.
      * @return filter that checks is it the exact file name.
      */
-    private static Filter getFileFilter(String filterComponent) {
+    private static Predicate<File> getFileFilter(String filterComponent) {
         return x -> x.getName().equals(filterComponent);
     }
 
@@ -266,7 +272,7 @@ public class FilterFactory {
         return false;
     }
 
-    private static Filter getBetween(double lower, double upper) {
+    private static Predicate<File> getBetween(double lower, double upper) {
         return x -> lower * K_BYTES <= x.length() && x.length() <= upper * K_BYTES;
     }
 
@@ -293,7 +299,7 @@ public class FilterFactory {
      * @param upper upper bound.
      * @return filter that checks is it strictly smaller than the upper bound.
      */
-    private static Filter getSmallerThan(double upper) {
+    private static Predicate<File> getSmallerThan(double upper) {
         return x -> x.length() < upper * K_BYTES;
     }
 
@@ -301,7 +307,7 @@ public class FilterFactory {
      * @param lower lower bound.
      * @return filter that checks is it strictly greater than the lower bound.
      */
-    private static Filter getGreaterThan(double lower) {
+    private static Predicate<File> getGreaterThan(double lower) {
         return x -> x.length() > lower * K_BYTES;
     }
 
@@ -322,7 +328,7 @@ public class FilterFactory {
     /**
      * @return default filter (aka "all").
      */
-    public static Filter getDefaultFilter(){
+    public static Predicate<File> getDefaultFilter(){
         return getAll();
     }
 

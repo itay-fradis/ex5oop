@@ -1,8 +1,5 @@
 package filesprocessing;
 
-import filesprocessing.filters.Filter;
-import filesprocessing.filters.FilterFactory;
-
 import java.io.*;
 import java.util.*;
 
