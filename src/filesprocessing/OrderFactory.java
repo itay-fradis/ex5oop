@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.io.*;
 import java.util.function.Predicate;
 
-import org.apache.*;
+import filesprocessing.orders.BadOrderException;
 
 
 /**
@@ -41,7 +41,13 @@ public class OrderFactory {
      */
     public static OrderFactory getOrderFactoryInstance() {return orderFactoryInstance; }
 
-    public static Comparator<File> createFilter(String orderName) throws Exception {
+    /**
+     * the factory itself.
+     * @param orderName given order name.
+     * @return order object (comperator).
+     * @throws BadOrderException if encounters bad order format/name.
+     */
+    public static Comparator<File> createOrder(String orderName) throws BadOrderException {
         Comparator<File> order = null;
         Predicate<File> filter;
         String[] orderComponents = orderName.split(DELIMITER);
@@ -51,21 +57,21 @@ public class OrderFactory {
                     order = getAbsOrder();
                     break;
                 }
-                throw new Exception();
+                throw new BadOrderException();
             case TYPE_ORDER:
                 if (isLegalNameOrder(orderComponents)){
                     order = getTypeOrder();
                     break;
                 }
-                throw new Exception();
+                throw new BadOrderException();
             case SIZE_ORDER:
                 if (isLegalNameOrder(orderComponents)){
                     order = getSizeOrder();
                     break;
                 }
-                throw new Exception();
+                throw new BadOrderException();
             default:
-                throw new Exception();
+                throw new BadOrderException();
         }
         if (orderComponents[orderComponents.length - 1].equals(REVERSE_SUFFIX)){
             order = order.reversed();
@@ -73,6 +79,9 @@ public class OrderFactory {
         return order;
     }
 
+    /**
+     * @return comparator of file's size. if sizes are equal, compare by abs.
+     */
     private static Comparator<File> getSizeOrder() {
         return (x, y) -> {
             if (x.length() == y.length()){
@@ -82,6 +91,9 @@ public class OrderFactory {
         };
     }
 
+    /**
+     * @return comparator of file's type alphabetic order.
+     */
     private static Comparator<File> getTypeOrder() {
         return (x, y) -> {
             if (getFileType(x).compareTo(getFileType(y)) == 0){
@@ -91,10 +103,18 @@ public class OrderFactory {
         };
     }
 
+    /**
+     * @return comparator of alphabetic order.
+     */
     private static Comparator<File> getAbsOrder() {
         return (x, y) -> x.getAbsolutePath().compareTo(y.getAbsolutePath());
     }
 
+    /**
+     * checks of order is in the correct format.
+     * @param orderComponents given order components in string.
+     * @return whether the format is legal or not.
+     */
     private static boolean isLegalNameOrder(String[] orderComponents) {
         if (orderComponents.length == 1){
             return true;
@@ -105,6 +125,10 @@ public class OrderFactory {
         return false;
     }
 
+    /**
+     * @param file given file
+     * @return file type.
+     */
     private static String getFileType(File file){
         String[] components = file.getName().split("\\.");
         if (components.length == 1){
@@ -113,5 +137,11 @@ public class OrderFactory {
         return components[components.length - 1];
     }
 
+    /**
+     * @return AbsOrder comparator.
+     */
+    public static Comparator<File> getDefaultOrder(){
+        return getAbsOrder();
+    }
 
 }

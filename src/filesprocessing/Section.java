@@ -2,8 +2,10 @@ package filesprocessing;
 
 import filesprocessing.filters.BadFilterException;
 import filesprocessing.filters.FilterFactory;
+import filesprocessing.orders.BadOrderException;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 
@@ -45,7 +47,7 @@ public class Section {
     /**
      * @return new filter object.
      */
-    private Predicate<File> createFilter()  {
+    public Predicate<File> createFilter()  {
         Predicate<File> filter = FilterFactory.getDefaultFilter();
         try{
             filter = FilterFactory.createFilter(filterName);
@@ -56,7 +58,14 @@ public class Section {
         return filter;
     }
 
-    private void createOrder() {
+    public Comparator<File> createOrder() {
+        Comparator<File> order = OrderFactory.getDefaultOrder();
+        try{
+            order = OrderFactory.createOrder(orderName);
+        } catch (BadOrderException e) {
+            System.err.println(WARNING_MSG + orderL);
+        }
+        return order;
 
     }
 
