@@ -1,4 +1,4 @@
 package filesprocessing.orders;
 
-public interface Order {
+public class BadOrderException {
 }

@@ -1,5 +1,8 @@
 package filesprocessing;
 
+import filesprocessing.filters.Filter;
+import filesprocessing.filters.FilterFactory;
+
 import java.io.*;
 import java.util.*;
 
@@ -25,7 +28,7 @@ public class Parser {
      * @param fileName of the command file.
      * @return array of sections.
      */
-    public static Section[] parseCommandFile(String fileName) throws IOException, BadFormatCommandFile {
+    public static Section[] parseCommandFile(String fileName) throws IOException, BadFormatCommandFileException {
 
         List<Section> sectionList = new ArrayList<>();
         int lineIndex = 0;
@@ -38,7 +41,7 @@ public class Parser {
         lineIndex++;
         while (line != null){
             if (!line.equals(FILTER_NAME)){
-                throw new BadFormatCommandFile(BAD_FORMAT_ERROR_FILTER);
+                throw new BadFormatCommandFileException(BAD_FORMAT_ERROR_FILTER);
             }
             line = reader.readLine();
             filter = line;
@@ -46,7 +49,7 @@ public class Parser {
             filterLine = lineIndex;
             line = reader.readLine();
             if (!line.equals(ORDER_NAME)){
-                throw new BadFormatCommandFile(BAD_FORMAT_ERROR_ORDER);
+                throw new BadFormatCommandFileException(BAD_FORMAT_ERROR_ORDER);
             }
             line = reader.readLine();
             lineIndex += 2;
@@ -75,11 +78,13 @@ public class Parser {
      */
     public static File[] sourceDir2files(String fileName){
         File sourceDir = new File(fileName);
-        File[] result = sourceDir.listFiles();
-        if (result == null || result.length == 0) {
-            System.err.println("ERROR: No files in sourcedir");
-            return null;
+        File[] filesForCheck = sourceDir.listFiles();
+        ArrayList<File> result = new ArrayList<>();
+        for (File file: filesForCheck){
+            if (file.isFile()){
+                result.add(file);
+            }
         }
-        return result;
+        return result.toArray(new File[0]);
     }
 }

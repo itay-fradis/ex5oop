@@ -3,7 +3,7 @@ package filesprocessing;
 /**
  * type two error. bad format of sub-section.
  */
-public class BadFormatCommandFile extends Exception{
+public class BadFormatCommandFileException extends Exception{
 
     /** prevents annoying warning */
     private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public class BadFormatCommandFile extends Exception{
     /**
      * default constructor
      */
-    public BadFormatCommandFile(){
+    public BadFormatCommandFileException(){
         super(DEFAULT_ERR_MSG_BAD_FORMAT);
     }
 
@@ -22,7 +22,7 @@ public class BadFormatCommandFile extends Exception{
      * constructor
      * @param errorMessage message ctor
      */
-    public BadFormatCommandFile(String errorMessage){
+    public BadFormatCommandFileException(String errorMessage){
         super(errorMessage);
     }
 }

@@ -31,11 +31,10 @@ public class DirectoryProcessor {
         catch (IOException error){
             System.err.println(IO_ERROR_MSG);
         }
-        catch (BadFormatCommandFile error){
+        catch (BadFormatCommandFileException error){
             System.err.println(error.getMessage());
         }
-
-
+        File[] directoryFiles = Parser.sourceDir2files(args[0]);
 
 
     }

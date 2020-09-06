@@ -1,4 +1,4 @@
-import filesprocessing.BadFormatCommandFile;
+import filesprocessing.BadFormatCommandFileException;
 import filesprocessing.Parser;
 import org.junit.Test;
 import java.io.*;
@@ -13,7 +13,7 @@ public class ParserTest {
 
 
     @Test
-    public void testParserLegalFile() throws IOException, BadFormatCommandFile {
+    public void testParserLegalFile() throws IOException, BadFormatCommandFileException {
         Parser.parseCommandFile("Command files/filter002.flt");
         Parser.parseCommandFile("Command files/filter007.flt");
         Parser.parseCommandFile("Command files/filter019.flt");
@@ -34,8 +34,8 @@ public class ParserTest {
 
     }
 
-    @Test(expected = BadFormatCommandFile.class)
-    public void testParserIllegal() throws IOException, BadFormatCommandFile {
+    @Test(expected = BadFormatCommandFileException.class)
+    public void testParserIllegal() throws IOException, BadFormatCommandFileException {
         //FILTEr
         Parser.parseCommandFile("Command files/filtertest4.flt");
 
